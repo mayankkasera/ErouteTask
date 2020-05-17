@@ -1,4 +1,4 @@
-package com.example.eroutetask
+package com.example.eroutetask.ui.splash
 
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,6 +12,8 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import com.example.eroutetask.R
+import com.example.eroutetask.ui.scan.ScanActivity
 
 class SplashActivity : AppCompatActivity() {
 
@@ -45,7 +47,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun gotoMain() {
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, ScanActivity::class.java))
         finish()
     }
 
@@ -67,7 +69,9 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun showAppSettingsDialog() {
-        AlertDialog.Builder(this,R.style.CustomAlertDialog)
+        AlertDialog.Builder(this,
+            R.style.CustomAlertDialog
+        )
             .setTitle("Grant permission")
             .setMessage("We need camera permission to scan QR codes. Go to App Settings and manage permissions")
             .setPositiveButton("Grant"){
