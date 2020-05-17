@@ -12,10 +12,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.eroutetask.R
 import com.example.eroutetask.util.createFactory
+import com.example.eroutetask.util.threads.PostExecutionThread
+import com.example.eroutetask.util.threads.SchedulersThread
+import com.example.eroutetask.util.threads.ThreadExecutor
+import com.example.eroutetask.util.threads.UiThread
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.IOException
 import java.util.regex.Matcher
@@ -84,7 +90,7 @@ class ScanActivity : AppCompatActivity() {
                     val items = detections.detectedItems
                     if (items.size() != 0) {
                         text_view.post(Runnable {
-                            val stringBuilder = StringBuilder()
+                            val stringBuilder = StringBuffer()
                             for (i in 0 until items.size()) {
                                 val item = items.valueAt(i)
                                 stringBuilder.append(item.value)
@@ -104,13 +110,14 @@ class ScanActivity : AppCompatActivity() {
         scanViewmodel.mutableLiveData.observe(this, Observer {
             when(it){
                 is ScanState.ScanSuccess -> text_view.setText("${it.data}")
+                ScanState.NoData -> text_view.setText("No Data")
             }
         })
     }
 
     private fun init(){
         surface_view =  findViewById(R.id.surface_view) as SurfaceView
-        val factory = ScanViewmodel(ScanHelper()).createFactory()
+        val factory = ScanViewmodel(UiThread(),SchedulersThread(),ScanHelper()).createFactory()
         scanViewmodel = ViewModelProvider(this, factory).get(ScanViewmodel::class.java)
 
     }

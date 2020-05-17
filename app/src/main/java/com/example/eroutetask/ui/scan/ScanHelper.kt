@@ -5,12 +5,11 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class ScanHelper {
-    fun scan(input : StringBuilder) : Single<StringBuilder>{
-
+    fun scan(input : StringBuffer) : Single<StringBuffer>{
         val pattern: Pattern = Pattern.compile("MW\\w+")
 
         val matcher: Matcher = pattern.matcher(input)
-        val stringBuilder = StringBuilder()
+        val stringBuilder = StringBuffer()
         while (matcher.find()) {
             stringBuilder.append(matcher.group())
             stringBuilder.append("\n")
